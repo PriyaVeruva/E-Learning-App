@@ -1,24 +1,27 @@
 import React, { useState } from "react"
 import validator from "validator"
-import {Box, Container, Typography,Paper, TextField, Button } from '@mui/material'
-import {makeStyles} from '@mui/styles'
-const useStyles  = makeStyles(theme =>({
-    root :{
-        width :'75vw',
-        height : "150vh",
-        //backgroundColor : theme.palette.grey[300],
-      paddingTop : '50px'
+import { Box, Container, Paper, TextField, Button } from '@mui/material'
+import { makeStyles } from '@mui/styles'
+const useStyles = makeStyles(({
+    root: {
+
+        '& MuiControl-root': {
+            width: '80%',
+            margin: '4'
+        }
+    },
+    formControl: {
+        minWidth: 100
     }
 }))
 const StudentForm = (props) => {
-    const classes=useStyles()
-    const { formSubmission ,name:n,email:e,toggle,_id} = props
-    const [name, setName] = useState(n?n:'')
-    const [email, setEmail] = useState(e?e:'')
+    const classes = useStyles()
+    const { formSubmission, name: n, email: e, toggle, _id } = props
+    const [name, setName] = useState(n ? n : '')
+    const [email, setEmail] = useState(e ? e : '')
     const [password, setPassword] = useState('')
     const [formErrors, setFormErrors] = useState({})
     const errors = {}
-
     const handleChange = (e) => {
         const input = e.target.name
         if (input === "name") {
@@ -49,7 +52,6 @@ const StudentForm = (props) => {
             errors.password = "invalid password"
         }
     }
-
     const handleSubmit = (e) => {
         e.preventDefault()
         runValidations()
@@ -59,15 +61,14 @@ const StudentForm = (props) => {
         else {
             setFormErrors(errors)
         }
-
         const formData = {
-            _id:_id,
+
             name: name,
             email: email,
             password: password,
             isAllowed: 'true'
         }
-       console.log(formData)
+
         formSubmission(formData)
         setName('')
         setEmail('')
@@ -75,74 +76,25 @@ const StudentForm = (props) => {
     }
     return (
         <div>
-            {/* <form onSubmit={handleSubmit}>
-                <label>Name</label>
-                <input type="text"
-                    name="name"
-                    value={name}
-                    onChange={handleChange}
-                    placeholder="Name"
-                />{formErrors.length !== 0 && <span>{formErrors.name}</span>}<br />
+            <center>
+                <Container className={classes.root} maxWidth="md">
+                    <Paper component={Box} width="50%" mx="auto" p={4}>
 
-                <label>Email</label>
-                <input type="email"
-                    name="email"
-                    value={email}
-                    onChange={handleChange}
-                    placeholder="Email Address"
-                /> {formErrors.length !== 0 && <span>{formErrors.email}</span>}<br />
-
-    {!toggle&&   
-    <div>       
-     <label>Password</label>
-                <input type="password"
-                    name="password"
-                    value={password}
-                    onChange={handleChange}
-                    placeholder="Password "
-                />{formErrors.length !== 0 && <span>{formErrors.password}</span>}<br />
-                </div>
-    }
-
-                <input type="submit" value="Register Student" />
-            </form>*/}
-
-<center>
-<Container className = {classes.root} maxWidth="md">
-    <Paper component ={Box} width ="50%" mx= "auto" p={4}>
-        {!toggle?<Typography variant ="h4">
-            Sign Up 
-        </Typography>:<Typography variant ="h4">
-            Update Profile Details
-        </Typography>}
-        <form onSubmit={handleSubmit}>
-            <TextField fullWidth placeholder="Enter your Name" margin ="normal" variant ="outlined" color ="secondary" label ="Name"
-            value ={name} name ="name" onChange ={handleChange}/>
-            {formErrors.name && <span style={{color : 'red'}}>{formErrors.name}</span>}
-
-
-            <TextField fullWidth placeholder ="Enter your Email" margin ="normal" variant ="outlined" color ="secondary" label ="Email"
-            value ={email} name ="email" onChange = {handleChange}/>
-            {formErrors.email && <span style={{color : 'red'}}>{formErrors.email}</span>}
-
-           {!toggle&& <div><TextField fullWidth placeholder ="Enter Password" margin ="normal" variant ="outlined" color ="secondary" label ="Password"
-            type = "password" value ={password} name ="password" onChange ={handleChange}/>
-            { formErrors.password&& <span style={{color : 'red'}}> {formErrors.password} </span> }
-            </div>
-            }
-
-            
-
-            {!toggle ? <Button type="submit" variant="contained" color="primary" float ='left'> Create New Account </Button> :<Button type="submit" variant="contained" color="primary" float ='left'> Update </Button> }
-            
-
-           
-        </form>
-    </Paper>
-</Container>
-</center>
-
-        </div> 
+                        <form onSubmit={handleSubmit}>
+                            <TextField fullWidth placeholder="Enter your Name" margin="normal" variant="outlined" color="secondary" label="Name" value={name} name="name" onChange={handleChange} />
+                            {formErrors.name && <span style={{ color: 'red' }}>{formErrors.name}</span>}
+                            <TextField fullWidth placeholder="Enter your Email" margin="normal" variant="outlined" color="secondary" label="Email" value={email} name="email" onChange={handleChange} />
+                            {formErrors.email && <span style={{ color: 'red' }}>{formErrors.email}</span>}
+                            {!toggle && <div><TextField fullWidth placeholder="Enter Password" margin="normal" variant="outlined" color="secondary" label="Password" type="password" value={password} name="password" onChange={handleChange} />
+                                {formErrors.password && <span style={{ color: 'red' }}> {formErrors.password} </span>}
+                            </div>
+                            }
+                            <Button type="submit" variant="contained" color="primary" float='left'> Submit </Button>
+                        </form>
+                    </Paper>
+                </Container>
+            </center>
+        </div>
     )
 }
 export default StudentForm

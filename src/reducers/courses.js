@@ -1,9 +1,9 @@
-const courses=[]
-const coursesForm=(state=courses,action)=>
+const coursesData=[]
+const courses=(state=coursesData,action)=>
 {
     switch(action.type)
     {
-    case "Create_Course":
+    case "Add_Course":
     {
         return [...state,{...action.payload}]
     }
@@ -11,7 +11,7 @@ const coursesForm=(state=courses,action)=>
     {
         return [...action.payload]
     }
-    case "Courses_List":
+    case "Course_Details":
         {
             return [ {...action.payload} ]
         }
@@ -22,31 +22,31 @@ console.log(res,'res')
 return res
         }
 
+       
         case "UnEnroll_Students":
+            {
+      return state.filter(ele=>
         {
-  return state.filter(ele=>
-    {
-        if(ele._id!==action.payload)
+            if(ele._id!==action.payload)
+            {
+                return {}
+            }
+        })
+    
+            }
+    case "Edit_Course":
         {
-            return {}
+            return state.map(ele=>
+                {
+                    if(ele._id===action.payload)
+                    {
+                        return {...ele,...action.pay}
+                    }
+                    else{
+                        return {...ele}
+                    }
+                })
         }
-    })
-
-        }
-
-    // case "Updated_Course":
-    //     {
-    //         return state.map(ele=>
-    //             {
-    //                 if(ele._id===action.payload)
-    //                 {
-    //                     return {...ele,...action.pay}
-    //                 }
-    //                 else{
-    //                     return {...ele}
-    //                 }
-    //             })
-    //     }
     case "Delete_Course":
         {
             return state.filter(ele=>
@@ -58,10 +58,14 @@ return res
                     })
             
         }
+        case "Enrolled_Courses":
+            {
+                return [...action.payload]
+            }
     
     default:{
         return[...state]
     }
 }
 }
-export default coursesForm
+export default courses

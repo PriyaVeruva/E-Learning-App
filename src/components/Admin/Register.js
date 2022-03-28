@@ -11,11 +11,8 @@ const Register = (props) => {
     }
     return (
         <div>
-             <Button type="submit" variant="contained" color="secondary" float ='left' onClick={() => props.history.push("/login")}><LoginIcon/> </Button>
+            <Button type="submit" variant="contained" color="secondary" float='left' onClick={() => props.history.push("/login")}><LoginIcon /> </Button>
             <FormData formSubmission={formSubmission} />
-            
-          
-         
         </div>
     )
 }

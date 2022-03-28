@@ -1,15 +1,13 @@
 import React, { useEffect } from "react";
 import { Link, withRouter } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { startCoursesList } from "../../actions/courseList";
+import { startCoursesList } from "../../actions/courses";
 import { makeStyles } from '@mui/styles'
 import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
-
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(({
     root: {
         width: '75vw',
         height: "150vh",
-        //backgroundColor : theme.palette.grey[300],
         paddingTop: '50px'
     },
     typography: {
@@ -24,26 +22,21 @@ const useStyles = makeStyles(theme => ({
 
 const GetCourseInfo = (props) => {
     const classes = useStyles()
-
     const { id } = props.match.params
     const dispatch = useDispatch()
-    const coursesForm = useSelector((state) => {
-        return state.coursesForm
+    const courses = useSelector((state) => {
+        return state.courses
     })
     useEffect(() => {
         dispatch(startCoursesList(id, props.history.push))
     }, [])
-
     return (
         <div>
-            <Link to="/allcourses"><NavigateBeforeIcon sx={{ fontSize: 40 }} /></Link>
-
-
+    {localStorage.getItem('role')==="admin"?<Link to="/allcourses"><NavigateBeforeIcon sx={{ fontSize: 40 }} /></Link>:   <Link to="/enrolledcourses"><NavigateBeforeIcon sx={{ fontSize: 40 }} /></Link>}
             <div className={`${classes.text} ${classes.typography}`}>
-
-                <h1>Course Details</h1>
+                <h1 style={{color:"Background"}}>Course Details</h1>
                 {
-                    coursesForm.map(ele => {
+                    courses.map(ele => {
                         return (
                             <div key={ele._id} >
                                 <p>Name:{ele.name}</p>
@@ -51,9 +44,8 @@ const GetCourseInfo = (props) => {
                                 <p>Category:{ele.category}</p>
                                 <p>Level:{ele.level}</p>
                                 <p>Author:{ele.author}</p>
-                                <p>ISDELETE:{ele.isDelete}</p>
-                                <p>Students:{ele.students.length}</p>
-
+                               
+                         {localStorage.getItem('role')==="admin"? <p>Students:{ele.students.length}</p>:""}
                             </div>
                         )
                     })

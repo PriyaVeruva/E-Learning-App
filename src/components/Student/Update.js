@@ -1,56 +1,57 @@
 import React, { useState, useEffect } from "react";
-import { withRouter } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux"
-import { startUpadtedStudent } from "../../actions/allStudentDetails";
+import { startUpdatedStudent } from "../../actions/students";
+import { startStudentProfile } from "../../actions/students";
 import StudentForm from "./StudentForm";
-import EditIcon from '@mui/icons-material/Edit';
 import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
-import { Button } from "@mui/material";
+import { Typography } from "@mui/material";
 import swal from 'sweetalert'
 const Update = (props) => {
     const { id } = props.match.params
-   const [details, setDetails] = useState({})
-   const[toggle,setToggle]=useState(false)
+    const [toggle, setToggle] = useState(true)
     const dispatch = useDispatch()
-    const state = useSelector((state) => {
-        return state
+    const student = useSelector((state) => {
+        return state.student
     })
-
     useEffect(() => {
-        if (state.studentRegister.length > 0) {
-            const find = state.studentRegister.find(ele => ele._id === id)
-            setDetails(find)
-        }
+        dispatch(startStudentProfile(id, swal))
     }, [])
-//console.log(details,"details")
-
-
-const handleToggle=()=>
-{
-    setToggle(!toggle)
-}
-
-//     //PUT REQUEST 
-    const formSubmission=(formData)=>
-    {
-        dispatch(startUpadtedStudent(formData,id,handleToggle,props.history.push,swal))
+    const handleToggle = () => {
+        setToggle(!toggle)
     }
-
+    const formSubmission = (formData) => {
+        dispatch(startUpdatedStudent(formData, id, handleToggle, props.history.push, swal))
+    }
     return (
         <div>
-        {toggle?
-            <div>
-                    <Button onClick={handleToggle} ><NavigateBeforeIcon  sx={{ fontSize: 40 }} /></Button>
-        <StudentForm formSubmission={formSubmission} name={details.name} email={details.email} toggle={toggle}/>
-    
-        </div>
-        :
-        <div>
-             <Button  onClick={handleToggle} variant="contained" color="secondary" float ='left'><EditIcon/></Button>
-            </div>
-        }
+
+            <Link to="/allstudents"><NavigateBeforeIcon sx={{ fontSize: 40 }} /></Link>
+            {
+                toggle && <Typography className="container" textAlign="center" margin="1rem auto" style={{ justifycontent: "center" }} variant="h4">
+                    Update Student Details
+                </Typography>
+            }
+            {
+                toggle &&
+                <div>
+                    {
+                        student.map(ele => {
+                            return (
+                                <div key={ele._id}>
+                                    <StudentForm
+                                        formSubmission={formSubmission}
+                                        name={ele.name}
+                                        email={ele.email}
+                                        toggle={toggle} />
+                                </div>
+                            )
+                        })
+                    }
+                </div>
+
+            }
         </div>
     )
-
-    }
+}
 export default withRouter(Update)

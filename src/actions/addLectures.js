@@ -1,5 +1,5 @@
 import axios from 'axios'
-export const startCreateLectures=(formData,id)=>
+export const startCreateLectures=(formData,id,swal)=>
 {
     return (dispatch)=>
     {
@@ -14,12 +14,12 @@ export const startCreateLectures=(formData,id)=>
             console.log(result)
             if(result.hasOwnProperty('errors'))
     {
-alert(result.message)
+swal(result.message)
     }
     else 
  {
     console.log(result)
-    alert("Sucessfully created Lectures")
+    swal("Sucessfully created Lectures")
     dispatch(lecturesData(result))
     //navigate("/login")   
 }
@@ -137,5 +137,34 @@ export const deleteLectureInfo=((result)=>
     }
 })
 
+//edit lectures
+
+export const startUpdateLecture = (formData, cid, id, handleToggle) => {
+    return (dispatch) => {
+        axios.put(`https://dct-e-learning.herokuapp.com/api/courses/${cid}/lectures/${id}`, formData, {
+            headers: {
+                "Authorization": localStorage.getItem('token')
+            }
+        })
+            .then((response) => {
+                const result = response.data
+                console.log(result, "updated")
+                dispatch(getUpdated(result))
+                alert("Data has been updated successfully")
+                handleToggle()
+            })
+            .catch((err) => {
+                alert(err.msg)
+            })
+    }
+}
+export const getUpdated = ((result) => {
+    return {
+        type: "Updated_Lecture",
+        payload: result._id,
+        pay:result
+       
+    }
+})
 
 
